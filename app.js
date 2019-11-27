@@ -12,10 +12,8 @@ async function scrape() {
   );
   await page.waitFor(5000);
   const result = await page.evaluate(() => {
-    let title = document.querySelector(".productDetail-tileName").innerText;
-    let price = document.querySelector(
-      "#center-panel > div > wow-product-detail > div > wow-product-detail-tile > section > div > div.productDetail-tileContainer > div.productDetail-tile.has-header > div:nth-child(2) > div > div:nth-child(6) > wow-price > div"
-    ).innerText;
+    let title = document.querySelector(".shelfProductTile-title").innerText;
+    let price = document.querySelector(".price").innerText;
     return {
       title,
       price
