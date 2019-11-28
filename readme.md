@@ -1,4 +1,4 @@
-# Web Scrapper for Woolies
+# Supermarket Web Scrapper
 
 ## Setting up
 ```
