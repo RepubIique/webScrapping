@@ -4,6 +4,7 @@
   "description": "",
   "main": "app.js",
   "dependencies": {
+    "inquirer": "^7.0.0",
     "puppeteer": "^2.0.0"
   },
   "devDependencies": {},
