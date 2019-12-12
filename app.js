@@ -1,7 +1,13 @@
 const puppeteer = require("puppeteer");
 let inquirer = require("inquirer");
+const fs = require(`fs`);
+const chalk = require(`chalk`);
 
-//emulating devices but it doesnt worl
+//Colourful debugging
+const error = chalk.bold.red;
+const success = chalk.keyword("green");
+
+//emulating devices but it doesnt work
 const iPad = puppeteer.devices["iPad Pro"];
 
 inquirer
@@ -31,28 +37,32 @@ inquirer
         "https://www.woolworths.com.au/shop/search/products?searchTerm=" +
           searchString
       );
-      await page.waitFor(1000);
+      await page.waitFor(500);
 
-      // Click on the first product
-      await page.click(
-        `#center-panel > div > wow-tile-list-with-content > ng-transclude > wow-search-product-tile-list > wow-tile-list > div > div.tileList > div.tileList-tiles > wow-tile:nth-child(1) > div > wow-shelf-product-tile > div > div.shelfProductTile-content > a > img`
-      );
-      await page.waitFor(1000);
-      const result = await page.evaluate(() => {
-        let title = document.querySelector(".productDetail-tileName").innerText;
-        let price = document.querySelector(".price").innerText;
-        let ingredients = document.querySelector(
-          "#center-panel > div > wow-product-detail > div > wow-product-detail-information > section > div > div:nth-child(4) > oly-view-more > div > div > div > p"
-        ).textContent;
-        return {
-          title,
-          price,
-          ingredients
-        };
-      });
+      for (var i = 3; i < 10; i++) {
+        let docNav = `#center-panel > div > wow-tile-list-with-content > ng-transclude > wow-search-product-tile-list > wow-tile-list > div > div.tileList > div.tileList-tiles > wow-tile:nth-child(${i}) > div > wow-shelf-product-tile > div > div.shelfProductTile-content > a > img`;
+        page.click(docNav);
+        await page.waitFor(500);
+        const result = await page.evaluate(() => {
+          let element = document.querySelectorAll(".shelfProductTile-image");
+          console.log(element);
+          let title = document.querySelector(".productDetail-tileName")
+            .innerText;
+          let price = document.querySelector(".price").innerText;
+          // let ingredients = document.querySelector(
+          //   "#center-panel > div > wow-product-detail > div > wow-product-detail-information > section > div > div:nth-child(4) > oly-view-more > div > div > div > p"
+          // ).textContent;
+          return {
+            title,
+            price
+            // ingredients
+          };
+        });
+        page.goBack();
+        return result;
+      }
 
       browser.close();
-      return result;
     }
 
     search().then(value => {
